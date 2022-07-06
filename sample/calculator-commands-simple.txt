@@ -1,0 +1,11 @@
+count = 4  + 4 * (5+6)-7
+
+Count = count + 1
+
+print count-4
+
+x = count * 2^2^2 * (4-2)
+
+count = 3* -x +4
+
+print count
