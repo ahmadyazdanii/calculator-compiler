@@ -6,6 +6,7 @@ print count-4
 
 x = count * 2^2^2 * (4-2)
 
-count = 3* -x +4
+print x
+count = 3* -x +4/3
 
 print count

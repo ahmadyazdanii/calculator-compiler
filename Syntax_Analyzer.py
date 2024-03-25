@@ -3,6 +3,7 @@ from Lexical_Analyzer import Tokenizer
 from os import path
 import sys
 
+
 class Syntax_Analyzer:
     def __init__(self, tokens_list):
         self.commands = tokens_list
@@ -30,7 +31,7 @@ class Syntax_Analyzer:
     def run(self):
         for command in self.commands:
             self.tokens = iter(command)
-            
+
             token = next(self.tokens)
             if token.type == "ID":
                 token_layer_1 = next(self.tokens)
@@ -61,17 +62,19 @@ class Syntax_Analyzer:
     def cal_2(self, base_token):
         num_1, op = self.cal_3(base_token)
         if op is not None:
-            while op.type in ["MUL"]:
+            while op.type in ["MUL", "DIV"]:
                 op_ex = op
                 num_2, op = self.cal_3(next(self.tokens))
                 if op_ex.type == "POW":
                     num_1 = pow(num_1, num_2)
+                elif op_ex.type == "DIV":
+                    num_1 /= num_2
                 else:
                     num_1 *= num_2
                 if op is None:
                     break
         return num_1, op
-        
+
     def cal_3(self, base_token):
         num_1, op = self.cal_4(base_token)
         if op is not None:
@@ -100,12 +103,16 @@ class Syntax_Analyzer:
                     try:
                         num_1 = self.variables[next_var.value] * -1
                     except KeyError:
-                        raise SyntaxError("{} is not declared in variables".format(next_var.value))
+                        raise SyntaxError(
+                            "{} is not declared in variables".format(next_var.value)
+                        )
             elif var.type == "ID":
                 try:
                     num_1 = self.variables[var.value]
                 except KeyError:
-                    raise SyntaxError("{} is not declared in variables".format(var.value))
+                    raise SyntaxError(
+                        "{} is not declared in variables".format(var.value)
+                    )
             elif var.type == "OPEN_BRACKET":
                 num_1, op_next = self.cal_1(next(self.tokens))
                 if op_next and op_next.type != "CLOSE_BRACKET":
